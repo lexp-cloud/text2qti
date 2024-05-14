@@ -8,7 +8,7 @@
 #
 
 
-from .quiz import Quiz, Question, GroupStart, GroupEnd, TextRegion
+from ..quiz import Quiz, Question, GroupStart, GroupEnd, TextRegion
 
 
 BEFORE_ITEMS = '''\

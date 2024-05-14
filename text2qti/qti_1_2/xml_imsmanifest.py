@@ -10,7 +10,7 @@
 
 import datetime
 from typing import Dict, Optional
-from .quiz import Image
+from ..quiz import Image
 
 
 MANIFEST_START = '''\
