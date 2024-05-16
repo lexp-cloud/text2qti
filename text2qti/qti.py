@@ -13,21 +13,23 @@ import io
 import pathlib
 from typing import Union
 from .quiz import Quiz
-from .qti_1_2.writer import Writer as Writer_1_2
+from .qti_1_2_canvas.writer import Writer as Writer_1_2
+from .qti_2_2.writer import Writer as Writer_2_2
 
 
 class QTI(object):
-    '''
+    """
     Create QTI from a Quiz object.
-    '''
-    def __init__(self, quiz: Quiz, version: str = '1.2'):
+    """
+
+    def __init__(self, quiz: Quiz, version: str = "1.2"):
         match version:
-            case '1.2':
+            case "1.2":
                 self.writer = Writer_1_2(quiz)
-            case '2.2':
-                raise NotImplementedError
+            case "2.2":
+                self.writer = Writer_2_2(quiz)
             case _:
-                raise ValueError(f'Unsupported QTI version: {self.version}')
+                raise ValueError(f"Unsupported QTI version: {self.version}")
 
     def zip_bytes(self) -> bytes:
         stream = io.BytesIO()
