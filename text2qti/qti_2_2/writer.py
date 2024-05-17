@@ -11,7 +11,7 @@
 from typing import BinaryIO
 import zipfile
 
-from text2qti.writer import WriterBase
+from ..writer import WriterBase
 from ..quiz import Quiz, Question
 from .xml_imsmanifest import imsmanifest
 from .xml_assessmentTest import assessment_test
@@ -56,12 +56,15 @@ class Writer(WriterBase):
             # one_question_at_a_time=quiz.one_question_at_a_time_xml,
             # cant_go_back=quiz.cant_go_back_xml,
         )
-        self.assessment_items = []
+        self.items = []
         for i, question in enumerate(self.questions):
-            self.assessment_items.append(
-                assessment_item(
-                    quiz=self.quiz, question=question, title=f"Question {i}"
-                )
+            self.items.append(
+                {
+                    "id": question.id,
+                    "assessment_item": assessment_item(
+                        quiz=self.quiz, question=question, title=f"Question {i+1}"
+                    ),
+                }
             )
 
     def write(self, bytes_stream: BinaryIO):
@@ -72,5 +75,10 @@ class Writer(WriterBase):
                 f"{self.test_identifier}.xml",
                 self.assessment_test,
             )
+            for item in self.items:
+                zf.writestr(
+                    f"{item['id']}.xml",
+                    item["assessment_item"],
+                )
             # for image in self.quiz.images.values():
             #     zf.writestr(image.qti_zip_path, image.data)
